@@ -5,26 +5,39 @@
   <h1>A sonnet</h1>
   <i>(just for you)</i>
   <p id="verse">Loading...
-  
-    <hr>
-    <div id="footer" style="font-size:
-    smaller"><a href="http://github.com/darius/amphigory">Source
-    code</a> on GitHub.
-    <p><em>Copyright &#169; 2012
-    <a href="http://wry.me/blog/">Darius Bacon</a><br/></em></div>
+  <p><input id="another" type="submit" value="Another?">  
+  <hr>
+  <div id="footer" style="font-size:
+  smaller"><a href="http://github.com/darius/amphigory">Source
+  code</a> on GitHub.
+  <p><em>Copyright &#169; 2012
+  <a href="http://wry.me/blog/">Darius Bacon</a><br/></em></div>
+
   <script src="cmudict.js"></script>
   <script src="verse.js"></script>
   <script type="text/javascript">
 
-    var output = document.getElementById('verse');
+var output  = document.getElementById('verse');
+var another = document.getElementById('another');
+
+var updateIntervalId;
 
 function updateVerse() {
     output.innerHTML = emit(states);
 }
-var updateIntervalId = setInterval(updateVerse, 50);
-versify(function(result) { 
-    clearInterval(updateIntervalId);
-    output.innerHTML = result;
-});
+
+function invokeTheMuse() {
+    if (updateIntervalId) clearInterval(updateIntervalId);
+    updateIntervalId = setInterval(updateVerse, 50);
+    versify(function(result) { 
+        if (updateIntervalId) clearInterval(updateIntervalId);
+        output.innerHTML = result;
+    });
+    return false;
+}
+invokeTheMuse();
+
+another.onclick = invokeTheMuse;
   </script>
+
 </body></html>
