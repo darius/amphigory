@@ -48,7 +48,9 @@ function checkRhyme(phones1, phones2) {
         var ph1 = phones1[L1-p];
         var ph2 = phones2[L2-p];
         if (sansStress(ph1) !== sansStress(ph2)) {
-            // TODO: this shouldn't rhyme: pecanins / vesna ins
+            // TODO: This shouldn't rhyme: pecanins / vesna ins
+            //       or anyway consider it low-strength.
+            //       Also: eager eyes / final eyes
             if (stressed || 1 === p)
                 return result;
             var n = p-1;
