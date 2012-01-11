@@ -160,6 +160,7 @@ function rhymesOK(lineNum, line) {
 }
 
 function checkMeter(syllableNum, phones) {
+    // TODO: allow words like U.S.? (all stressed, no unstressed)
     for (var i = 0; i < phones.length; ++i) {
         var ph = phones[i];
         var last = ph[ph.length-1];
