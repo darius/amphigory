@@ -51,6 +51,7 @@ function checkRhyme(phones1, phones2) {
             // TODO: This shouldn't rhyme: pecanins / vesna ins
             //       or anyway consider it low-strength.
             //       Also: eager eyes / final eyes
+            //       And AH0 should be deemed an especially weak sound.
             if (stressed || 1 === p)
                 return result;
             var n = p-1;
