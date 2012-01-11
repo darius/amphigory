@@ -4,12 +4,12 @@ First filter out less-useful entries, then compress it
 exploiting the sorted order.
 """
 
-import string
+import string, sys
 
 # common_words.txt is in descending order of frequency;
-# let's take the first 50000.
+# let's take the first 55000.
 common_words = set(line.split()[0]
-                   for i, line in zip(xrange(50000), open('common_words.txt')))
+                   for i, line in zip(xrange(55000), open('common_words.txt')))
 
 good_starts = "'" + string.ascii_uppercase
 
@@ -21,15 +21,30 @@ def potentially_iambic(phones):
     # odd-numbered or only even-numbered syllables, but not both:
     return len(stress_parities) < 2
 
+included = open('words.included', 'w')
+excluded = open('words.excluded', 'w')
+
 pronunciations = {}
 for line in open('../languagetoys/cmudict.0.7a'):
-    if ';;' in line or not line.strip(): continue
+    if ';;' in line or not line.strip():
+        continue
     word, phones = line.split(None, 1)
-    if word[0] not in good_starts: continue
-    if word.endswith(')'): continue # Ignore alternative pronunciations, for now
-    if word.lower() not in common_words: continue
-    if not potentially_iambic(phones.split()): continue
-    pronunciations[word.lower()] = tuple(phones.split())
+    if word[0] not in good_starts:
+        continue
+    if word.endswith(')'):
+         continue         # Ignore alternative pronunciations, for now
+    word = word.lower()
+    phones = phones.split()
+    if not potentially_iambic(phones):
+        continue
+    if word not in common_words:
+        excluded.write(word + '\n')
+        continue
+    included.write(word + '\n')
+    pronunciations[word] = tuple(phones)
+
+excluded.close()
+included.close()
 
 # Compressed encoding: strip out prefix in common with the previous
 # entry, replace it with its length.
