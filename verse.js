@@ -1,4 +1,4 @@
-// load('cmudict.js');
+// load('pronounce_iamb_compat.js');
 
 function decodeSequence(s) {
     var strings = s.split(' ');
@@ -90,7 +90,7 @@ function vowelStress(vowel) {
 }
 
 /// allPhones[390]
-//. AH0,B,Y,UW1,S
+//. AH0,D,AA1,P,T,S
 /// checkRhyme('M,AH0,B,Y,UW1,S'.split(','), allPhones[390])
 //. -2
 /// checkRhyme('M,AH0,B,Y,UW1,S'.split(','), 'Ou0,B,T,UW1,S'.split(','))
@@ -175,11 +175,11 @@ function checkMeter(syllableNum, phones) {
 var startVersify = makeVerseState('', [], 0, 0);
 
 /// allWords[390]
-//. abuse
+//. adopts
 /// checkMeter(0, allPhones[390])
 //. 2
 /// makeVerseState(allWords[390], allPhones[390], 0, 2).emit()
-//. abuse
+//. adopts
 
 var states = [];
 
