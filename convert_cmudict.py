@@ -15,14 +15,15 @@ good_starts = "'" + string.ascii_uppercase
 
 def potentially_iambic(phones):
     beats = [phone for phone in phones if phone[-1] in '012']
-    stress_parities = [i % 2 for i, phone in enumerate(beats)
-                       if phone[-1] in '12']
+    stress_parities = set(i % 2 for i, phone in enumerate(beats)
+                          if phone[-1] in '12')
     # A word can take part in iambic meter when it stresses only
     # odd-numbered or only even-numbered syllables, but not both:
     return len(stress_parities) < 2
 
 included = open('words.included', 'w')
-excluded = open('words.excluded', 'w')
+uncommon = open('words.uncommon', 'w')
+uniambic = open('words.uniambic', 'w')
 
 pronunciations = {}
 for line in open('../languagetoys/cmudict.0.7a'):
@@ -36,14 +37,16 @@ for line in open('../languagetoys/cmudict.0.7a'):
     word = word.lower()
     phones = phones.split()
     if not potentially_iambic(phones):
+        uniambic.write(word + '\n')
         continue
     if word not in common_words:
-        excluded.write(word + '\n')
+        uncommon.write(word + '\n')
         continue
     included.write(word + '\n')
     pronunciations[word] = tuple(phones)
 
-excluded.close()
+uniambic.close()
+uncommon.close()
 included.close()
 
 # Compressed encoding: strip out prefix in common with the previous
