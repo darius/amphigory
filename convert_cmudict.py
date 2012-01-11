@@ -1,10 +1,25 @@
 """
 Convert the CMU pronouncing dictionary to a JSON object.
+First filter out less-useful entries, then compress it 
+exploiting the sorted order.
 """
 
 import string
 
+# common_words.txt is in descending order of frequency;
+# let's take the first 50000.
+common_words = set(line.split()[0]
+                   for i, line in zip(xrange(50000), open('common_words.txt')))
+
 good_starts = "'" + string.ascii_uppercase
+
+def potentially_iambic(phones):
+    beats = [phone for phone in phones if phone[-1] in '012']
+    stress_parities = [i % 2 for i, phone in enumerate(beats)
+                       if phone[-1] in '12']
+    # A word can take part in iambic meter when it stresses only
+    # odd-numbered or only even-numbered syllables, but not both:
+    return len(stress_parities) < 2
 
 pronunciations = {}
 for line in open('../languagetoys/cmudict.0.7a'):
@@ -12,7 +27,12 @@ for line in open('../languagetoys/cmudict.0.7a'):
     word, phones = line.split(None, 1)
     if word[0] not in good_starts: continue
     if word.endswith(')'): continue # Ignore alternative pronunciations, for now
+    if word.lower() not in common_words: continue
+    if not potentially_iambic(phones.split()): continue
     pronunciations[word.lower()] = tuple(phones.split())
+
+# Compressed encoding: strip out prefix in common with the previous
+# entry, replace it with its length.
 
 def append(xs, prev, x):
     if not xs:
