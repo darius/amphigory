@@ -85,8 +85,6 @@ function vowelStress(vowel) {
     var last = vowel[vowel.length-1];
     // The CMU dict has a funny way of denoting stress:
     // 0 for none, 2 for secondary stress, 1 for primary.
-    if (last !== '0' && last !== '1' && last !== '2')
-        throw "wtf" + vowel
     return last === '0' ? 0 : last === '2' ? 1 : 3;
 }
 
