@@ -92,11 +92,11 @@ function vowelStress(vowel) {
 
 /// allPhones[390]
 //. AH0,D,IH1,SH,AH0,N
-/// checkRhyme('M,AH0,B,Y,UW1,S'.split(','), true, allPhones[390], true)
+/// checkRhyme('M,AH0,B,Y,UW1,S'.split(','), false, allPhones[390], false)
 //. -2
-/// checkRhyme('M,AH0,B,Y,UW1,S'.split(','), true, 'Ou0,B,T,UW1,S'.split(','), true)
+/// checkRhyme('M,AH0,B,Y,UW1,S'.split(','), false, 'Ou0,B,T,UW1,S'.split(','), false)
 //. 6
-/// checkRhyme(allPhones[390], false, allPhones[390], false)
+/// checkRhyme(allPhones[390], true, allPhones[390], true)
 //. -1
 
 function isVowel(phone) {
