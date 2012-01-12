@@ -8,9 +8,9 @@ TODO: omit 0-syllable words like MMMMMM -- I guess.
 import string, sys
 
 # common_words.txt is in descending order of frequency;
-# let's take the first 55000.
+# let's take only the most common.
 common_words = set(line.split()[0]
-                   for i, line in zip(xrange(55000), open('common_words.txt')))
+                   for i, line in zip(xrange(15000), open('common_words.txt')))
 
 good_starts = "'" + string.ascii_uppercase
 
