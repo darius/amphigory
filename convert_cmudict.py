@@ -2,6 +2,7 @@
 Convert the CMU pronouncing dictionary to a JSON object.
 First filter out less-useful entries, then compress it 
 exploiting the sorted order.
+TODO: omit 0-syllable words like MMMMMM -- I guess.
 """
 
 import string, sys
