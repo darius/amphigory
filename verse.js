@@ -24,7 +24,7 @@ var allWords = decodeSequence(dictionary.words);
 var allPhones = decodeSequence(dictionary.phones);
 (function() {
     for (var i = 0; i < allPhones.length; ++i)
-        allPhones[i] = allPhones[i].split('-')
+        allPhones[i] = [' '].concat(allPhones[i].split('-'));
 })();
 
 var verseLength = 14;
@@ -91,13 +91,17 @@ function vowelStress(vowel) {
 }
 
 /// allPhones[390]
-//. AH0,D,IH1,SH,AH0,N
+//.  ,AH0,D,IH1,SH,AH0,N
 /// checkRhyme('M,AH0,B,Y,UW1,S'.split(','), false, allPhones[390], false)
 //. -2
-/// checkRhyme('M,AH0,B,Y,UW1,S'.split(','), false, 'Ou0,B,T,UW1,S'.split(','), false)
+/// checkRhyme('M,AH0,B,Y,UW1,S'.split(','), false, 'OU0,B,T,UW1,S'.split(','), false)
 //. 6
 /// checkRhyme(allPhones[390], true, allPhones[390], true)
 //. -1
+/// checkRhyme('M, ,AH1,B,Y,UW0,S'.split(','), true, 'W, ,AH1,B,Y,UW0,S'.split(','), true)
+//. -1
+/// checkRhyme('M,AH1,B,Y,UW0,S'.split(','), true, 'W, ,AH1,B,Y,UW0,S'.split(','), true)
+//. 6
 
 function isVowel(phone) {
     var last = phone[phone.length-1];
@@ -198,7 +202,7 @@ var states = [];
 function versify(takeVerse) {
     var intervalId = setInterval(keepScribbling, 0);
     var persistence = 200000;
-    var backtrackProbability = 0.07;
+    var backtrackProbability = 0.1;
 
     var nfail = 0;
     states = [startVersify];
