@@ -1,4 +1,4 @@
-// load('pronounce_iamb_compat.js');
+//load('pronounce_iamb_compat.js');
 
 function decodeSequence(s) {
     var strings = s.split(' ');
@@ -38,12 +38,14 @@ var aRhyme = 0;
 // Return aNonrhyme, anEcho, or (aRhyme+strength).
 // Assumes iambic meter (to supply implicit stresses).
 // Assumes lengths > 0.
-function checkRhyme(phones1, phones2) {
+function checkRhyme(phones1, endStressed1, phones2, endStressed2) {
+    if (endStressed1 !== endStressed2)
+        return aNonrhyme;
     var L1 = phones1.length;
     var L2 = phones2.length;
     var L = Math.min(L1, L2);
     var result = aNonrhyme;
-    var stressed = true;
+    var stressed = !endStressed1;
     for (var p = 1; ; ++p) { // Offset from right end of both phones arrays.
         var ph1 = phones1[L1-p];
         var ph2 = phones2[L2-p];
@@ -89,18 +91,21 @@ function vowelStress(vowel) {
 }
 
 /// allPhones[390]
-//. AH0,D,AA1,P,T,S
-/// checkRhyme('M,AH0,B,Y,UW1,S'.split(','), allPhones[390])
+//. AH0,D,IH1,SH,AH0,N
+/// checkRhyme('M,AH0,B,Y,UW1,S'.split(','), true, allPhones[390], true)
 //. -2
-/// checkRhyme('M,AH0,B,Y,UW1,S'.split(','), 'Ou0,B,T,UW1,S'.split(','))
+/// checkRhyme('M,AH0,B,Y,UW1,S'.split(','), true, 'Ou0,B,T,UW1,S'.split(','), true)
 //. 6
-/// checkRhyme(allPhones[390], allPhones[390])
+/// checkRhyme(allPhones[390], false, allPhones[390], false)
 //. -1
 
 function isVowel(phone) {
     var last = phone[phone.length-1];
     return '0' <= last && last <= '2';
 }
+
+// lineLengths[i] is the length in syllables of line #i in the current state.
+var lineLengths = [];
 
 // Return a state given the *last* word, the last line's phones, and
 // the *next* line/syllable numbers.
@@ -113,15 +118,16 @@ function makeVerseState(word, line, lineNum, syllableNum) {
             var wp = randomWord();
             var w = wp[0], p = wp[1];
             var syllableAfter = checkMeter(syllableNum, p);
-            if (syllableAfter === null || 10 < syllableAfter)
+            if (syllableAfter === null || 11 < syllableAfter)
                 return null;
             else if (syllableAfter < 10)
                 return makeVerseState(w, line.concat(p), lineNum, syllableAfter);
             else {
                 line = line.concat(p);
-                if (!rhymesOK(lineNum, line))
+                if (!rhymesOK(lineNum, line, syllableAfter))
                     return null;
                 linePhones[lineNum] = line;
+                lineLengths[lineNum] = syllableAfter;
                 return makeVerseState(w, [], lineNum+1, 0);
             }
         },
@@ -131,6 +137,8 @@ function makeVerseState(word, line, lineNum, syllableNum) {
         },
     };
 };
+
+var startVersify = makeVerseState('', [], 0, 0);
 
 // linePhones[i] is a list of the phones of line #i in the current state
 // (for all completed lines in the current state).
@@ -145,21 +153,27 @@ var rhymeAcceptability = [.01, .06, .4, .8, 1, 1, 1];
 
 // Does line (a list of phones) rhyme appropriately? It should rhyme with all of
 // rhymeLines[lineNum] and non-rhyme with all of antiLines[lineNum].
-function rhymesOK(lineNum, line) {
+function rhymesOK(lineNum, line, nsyllables) {
     var i;
     for (i = 0; i < rhymeLines[lineNum].length; ++i) {
-        var rhyme = checkRhyme(line, linePhones[rhymeLines[lineNum][i]]);
+        var other = rhymeLines[lineNum][i];
+        var rhyme = checkRhyme(line, nsyllables % 2,
+                               linePhones[other], lineLengths[other] % 2);
         if (rhyme < aRhyme || rhymeAcceptability[rhyme] <= Math.random())
             return false;
     }
-    for (i = 0; i < antiLines[lineNum].length; ++i)
-        if (aNonrhyme !== checkRhyme(line, linePhones[antiLines[lineNum][i]]))
+    for (i = 0; i < antiLines[lineNum].length; ++i) {
+        var other = antiLines[lineNum][i];
+        if (aNonrhyme !== checkRhyme(line, nsyllables % 2,
+                                     linePhones[other], lineLengths[other] % 2))
             return false;
+    }
     return true;
 }
 
 function checkMeter(syllableNum, phones) {
     // TODO: allow words like U.S.? (all stressed, no unstressed)
+    //   And treat near-diphthongs as single syllables.
     for (var i = 0; i < phones.length; ++i) {
         var ph = phones[i];
         var last = ph[ph.length-1];
@@ -172,14 +186,12 @@ function checkMeter(syllableNum, phones) {
     return syllableNum;
 }
 
-var startVersify = makeVerseState('', [], 0, 0);
-
 /// allWords[390]
-//. adopts
+//. addition
 /// checkMeter(0, allPhones[390])
-//. 2
+//. 3
 /// makeVerseState(allWords[390], allPhones[390], 0, 2).emit()
-//. adopts
+//. addition
 
 var states = [];
 
