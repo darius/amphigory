@@ -198,7 +198,7 @@ var states = [];
 function versify(takeVerse) {
     var intervalId = setInterval(keepScribbling, 0);
     var persistence = 200000;
-    var backtrackProbability = 0.1;
+    var backtrackProbability = 0.07;
 
     var nfail = 0;
     states = [startVersify];
