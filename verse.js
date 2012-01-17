@@ -1,4 +1,9 @@
-//load('pronounce_iamb_compat.js');
+// The pronouncing dictionary, encoded in dictionary.words and
+// dictionary phones. We need to decode it before we can use it.
+// The result is two parallel arrays, of words and corresponding
+// phone sequences. A phone denotes a basic speech sound.
+
+// load('pronounce_iamb_compat.js');
 
 function decodeSequence(s) {
     var strings = s.split(' ');
@@ -27,15 +32,37 @@ var allPhones = decodeSequence(dictionary.phones);
         allPhones[i] = [' '].concat(allPhones[i].split('-'));
 })();
 
-var verseLength = 14;
+// Pick a word along with its pronunciation.
+function randomWord() {
+    var n = Math.floor(Math.random() * allWords.length);
+    return [allWords[n], allPhones[n]];
+}
 
-//// versify()
 
-var aNonrhyme = -2;
-var anEcho = -1;
-var aRhyme = 0;
+// Taking phones to appear in a line of iambic meter after syllableNum
+// syllables, does the line scan? If so, return the next syllable
+// number following; else null.
+function checkMeter(syllableNum, phones) {
+    for (var i = 0; i < phones.length; ++i) {
+        var ph = phones[i];
+        var last = ph[ph.length-1];
+        if ('0' <= last && last <= '2') {
+            if (syllableNum % 2 == 0 && last !== '0')
+                return null;
+            ++syllableNum;
+        }
+    }
+    return syllableNum;
+}
 
-// Return aNonrhyme, anEcho, or (aRhyme+strength).
+
+// Do two phone-sequences rhyme? And if so, how well?
+
+var aNonrhyme = -2;   // No, not at all.
+var anEcho = -1;      // No, they echo, e.g. the same word both times.
+var aRhyme = 0;       // Yes.
+
+// Return aNonrhyme, anEcho, or (aRhyme+strength where 0 <= strength <= 6).
 // Assumes iambic meter (to supply implicit stresses).
 // Assumes lengths > 0.
 function checkRhyme(phones1, endStressed1, phones2, endStressed2) {
@@ -50,10 +77,6 @@ function checkRhyme(phones1, endStressed1, phones2, endStressed2) {
         var ph1 = phones1[L1-p];
         var ph2 = phones2[L2-p];
         if (sansStress(ph1) !== sansStress(ph2)) {
-            // TODO: This shouldn't rhyme: pecanins / vesna ins
-            //       or anyway consider it low-strength.
-            //       Also: eager eyes / final eyes
-            //       And AH0 should be deemed an especially weak sound.
             if (stressed || 1 === p)
                 return result;
             var n = p-1;
@@ -77,8 +100,10 @@ function checkRhyme(phones1, endStressed1, phones2, endStressed2) {
     }
 }
 
-function sansStress(phone) {
-    return isVowel(phone) ? phone.substr(0, phone.length-1) : phone;
+// Is phone a vowel?
+function isVowel(phone) {
+    var last = phone[phone.length-1];
+    return '0' <= last && last <= '2';
 }
 
 // Return the amount of stress carried by the vowel:
@@ -90,8 +115,13 @@ function vowelStress(vowel) {
     return last === '0' ? 0 : last === '2' ? 1 : 3;
 }
 
-/// allPhones[390]
-//.  ,AH0,D,IH1,SH,AH0,N
+ // Return phone minus any vowel-stress designation it might carry.
+function sansStress(phone) {
+    return isVowel(phone) ? phone.substr(0, phone.length-1) : phone;
+}
+
+/// allPhones[1]
+//.  ,T,R,IH2,P,AH0,L,EY1
 /// checkRhyme('M,AH0,B,Y,UW1,S'.split(','), false, allPhones[390], false)
 //. -2
 /// checkRhyme('M,AH0,B,Y,UW1,S'.split(','), false, 'OU0,B,T,UW1,S'.split(','), false)
@@ -103,10 +133,20 @@ function vowelStress(vowel) {
 /// checkRhyme('M,AH1,B,Y,UW0,S'.split(','), true, 'W, ,AH1,B,Y,UW0,S'.split(','), true)
 //. 6
 
-function isVowel(phone) {
-    var last = phone[phone.length-1];
-    return '0' <= last && last <= '2';
-}
+
+// Statefully composing a whole random verse.
+
+// Shakespearean-sonnet rhyme scheme. Read this as a column for each
+// line number. E.g. line 0 is unconstrained; but line 1 must not
+// rhyme with line 0, and line 2 OTOH must rhyme with line 0.
+var rhymeLines = [[],[], [0],[1],[],[],[4],[5],[],[],[8],[9],[],    [12]];
+var antiLines  = [[],[0],[], [], [],[4],[],[], [],[8],[],[],  [8,9],[]];
+
+var verseLength = rhymeLines.length;
+
+// linePhones[i] is a list of the phones of line #i in the current state
+// (for all completed lines in the current state).
+var linePhones = [];
 
 // lineLengths[i] is the length in syllables of line #i in the current state.
 var lineLengths = [];
@@ -144,14 +184,6 @@ function makeVerseState(word, line, lineNum, syllableNum) {
 
 var startVersify = makeVerseState('', [], 0, 0);
 
-// linePhones[i] is a list of the phones of line #i in the current state
-// (for all completed lines in the current state).
-var linePhones = [];
-
-// Shakespearean-sonnet rhyme scheme
-var rhymeLines = [[],[], [0],[1],[],[],[4],[5],[],[],[8],[9],[],    [12]];
-var antiLines  = [[],[0],[], [], [],[4],[],[], [],[8],[],[],  [8,9],[]];
-
                         //  0    1   2   3  4  5  6
 var rhymeAcceptability = [.01, .06, .4, .8, 1, 1, 1];
 
@@ -175,30 +207,22 @@ function rhymesOK(lineNum, line, nsyllables) {
     return true;
 }
 
-function checkMeter(syllableNum, phones) {
-    // TODO: allow words like U.S.? (all stressed, no unstressed)
-    //   And treat near-diphthongs as single syllables.
-    for (var i = 0; i < phones.length; ++i) {
-        var ph = phones[i];
-        var last = ph[ph.length-1];
-        if ('0' <= last && last <= '2') {
-            if (syllableNum % 2 == 0 && last !== '0')
-                return null;
-            ++syllableNum;
-        }
-    }
-    return syllableNum;
-}
+/// allWords[1]
+//. aaa
+/// checkMeter(1, allPhones[1])
+//. 4
+/// makeVerseState(allWords[1], allPhones[1], 0, 2).emit()
+//. aaa
 
-/// allWords[390]
-//. addition
-/// checkMeter(0, allPhones[390])
-//. 3
-/// makeVerseState(allWords[390], allPhones[390], 0, 2).emit()
-//. addition
 
+// Compose a verse by advancing and backtracking.
+
+// All successive states of the versifying so far as it's gotten, kept
+// for backtracking and to emit the words from once we succeed.
 var states = [];
 
+// Make a new random verse and call takeVerse(theVerseText) with it.
+// Do the work in timeslices so we don't freeze the browser tab.
 function versify(takeVerse) {
     var intervalId = setInterval(keepScribbling, 0);
     var persistence = 200000;
@@ -234,15 +258,10 @@ function versify(takeVerse) {
     }
 }
 
+// Return the verse text as far as it's currently composed.
 function emit(states) {
     var parts = [];
     for (var i = 0; i < states.length; ++i)
         parts.push(states[i].emit());
     return parts.join(' ');
 }
-
-function randomWord() {
-    var n = Math.floor(Math.random() * allWords.length);
-    return [allWords[n], allPhones[n]];
-}
-
