@@ -226,13 +226,13 @@ var states = [];
 // Make a new random verse and call takeVerse(theVerseText) with it.
 // Do the work in timeslices so we don't freeze the browser tab.
 function versify(takeVerse) {
-    var intervalId = setInterval(keepScribbling, 0);
     var persistence = 200000;
     var backtrackProbability = 0.1;
 
     var nfail = 0;
     states = [startVersify];
 
+    setTimeout(keepScribbling, 0);
     function keepScribbling() {
         // When fuel runs out, yield this timeslice.
         for (var fuel = 1000; 0 < fuel; --fuel) {
@@ -240,7 +240,6 @@ function versify(takeVerse) {
             if (state !== null) {
                 states.push(state);
                 if (state.done()) {
-                    clearInterval(intervalId);
                     takeVerse(emit(states));
                     return;
                 }
@@ -257,6 +256,7 @@ function versify(takeVerse) {
                         break;
             }
         }
+        setTimeout(keepScribbling, 0);
     }
 }
 
