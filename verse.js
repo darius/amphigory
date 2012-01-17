@@ -1,10 +1,11 @@
 // The pronouncing dictionary, encoded in dictionary.words and
-// dictionary phones. We need to decode it before we can use it.
-// The result is two parallel arrays, of words and corresponding
-// phone sequences. A phone denotes a basic speech sound.
+// dictionary phones. We need to decompress it before we can use it.
+// The result is two parallel arrays, of words and corresponding phone
+// sequences. A phone denotes a basic speech sound.
 
 // load('pronounce_iamb_compat.js');
 
+// Decompress a string compressed by convert_cmudict.py, producing an array.
 function decodeSequence(s) {
     var strings = s.split(' ');
     var prev = null;
@@ -17,6 +18,7 @@ function decodeSequence(s) {
     return strings;
 }
 
+// Expand a string s using the common prefix from the previous string.
 function decode(prev, s) {
     var n = parseInt(s[0]);
     if (isNaN(n))
@@ -25,7 +27,7 @@ function decode(prev, s) {
         return prev.substr(0, n) + s.substr(1);
 }
 
-var allWords = decodeSequence(dictionary.words);
+var allWords  = decodeSequence(dictionary.words);
 var allPhones = decodeSequence(dictionary.phones);
 (function() {
     for (var i = 0; i < allPhones.length; ++i)
