@@ -14,7 +14,7 @@ common_words = set(line.split()[0]
 
 good_starts = "'" + string.ascii_uppercase
 
-def potentially_iambic(phones):
+def is_potentially_iambic(phones):
     beats = [phone for phone in phones if phone[-1] in '012']
     stress_parities = set(i % 2 for i, phone in enumerate(beats)
                           if phone[-1] in '12')
@@ -22,8 +22,13 @@ def potentially_iambic(phones):
     # odd-numbered or only even-numbered syllables, but not both:
     return len(stress_parities) < 2
 
+def are_all_stressed(phones):
+    stresses = set(phone[-1] for phone in phones if phone[-1] in '012')
+    return stresses == set(['1']) or stresses == set(['2'])
+
 included = open('words.included', 'w')
 uncommon = open('words.uncommon', 'w')
+allstressed = open('words.allstressed', 'w')
 uniambic = open('words.uniambic', 'w')
 
 pronunciations = {}
@@ -37,8 +42,9 @@ for line in open('../languagetoys/cmudict.0.7a'):
          continue         # Ignore alternative pronunciations, for now
     word = word.lower()
     phones = phones.split()
-    if not potentially_iambic(phones):
-        uniambic.write(word + '\n')
+    if not is_potentially_iambic(phones):
+        logfile = allstressed if are_all_stressed(phones) else uniambic
+        logfile.write(word + '\n')
         continue
     if word not in common_words:
         uncommon.write(word + '\n')
@@ -47,6 +53,7 @@ for line in open('../languagetoys/cmudict.0.7a'):
     pronunciations[word] = tuple(phones)
 
 uniambic.close()
+allstressed.close()
 uncommon.close()
 included.close()
 
