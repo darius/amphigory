@@ -5,7 +5,7 @@
   <h1>A sonnet</h1>
   <i>(just for you)</i>
   <p id="verse"><span style="font-size: smaller">[Excuse me while I invoke the muse...]</div>
-  <p><input id="another" type="submit" value="Another?">  
+  <p><input id="another" type="submit" value="Another?" disabled>
   <hr>
   <div id="footer" style="font-size: smaller">
   <a href="http://github.com/darius/amphigory">Source code</a> on
@@ -30,11 +30,13 @@ function updateVerse() {
 }
 
 function invokeTheMuse() {
+    another.disabled = true;
     if (updateIntervalId) clearInterval(updateIntervalId);
     updateIntervalId = setInterval(updateVerse, 50);
     versify(function(result) { 
         if (updateIntervalId) clearInterval(updateIntervalId);
         output.innerHTML = result;
+        another.disabled = false;
     });
     return false;
 }
