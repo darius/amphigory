@@ -1,3 +1,5 @@
+"use strict";
+
 // The pronouncing dictionary, encoded in dictionary.words and
 // dictionary phones. We need to decompress it before we can use it.
 // The result is two parallel arrays, of words and corresponding phone
