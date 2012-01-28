@@ -180,8 +180,10 @@ function makeVerseState(word, line, lineNum, syllableNum) {
             }
         },
         emit: function() {
-            var linebreak = syllableNum === 0 && 0 < lineNum && lineNum < verseLength;
-            return word + (linebreak ? '<br>' : '');
+            if (syllableNum === 0 && 0 < lineNum && lineNum < verseLength)
+                return word + '<br>' + (lineNum == 12 || lineNum == 13 ? '&nbsp;&nbsp;' : '');
+            else
+                return word;
         },
     };
 };
