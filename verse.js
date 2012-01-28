@@ -230,8 +230,10 @@ var states = [];
 // Make a new random verse and call takeVerse(theVerseText) with it.
 // Do the work in timeslices so we don't freeze the browser tab.
 function versify(takeVerse) {
-    var persistence = 200000;
-    var backtrackProbability = 0.1;
+    // NB 200000 and 0.1 usually finish faster.
+    // These numbers make it look a bit more organic:
+    var persistence = 1e6;
+    var backtrackProbability = 0.15;
 
     var nfail = 0;
     states = [startVersify];
