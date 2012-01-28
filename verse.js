@@ -159,9 +159,7 @@ var lineLengths = [];
 // the *next* line/syllable numbers.
 function makeVerseState(word, line, lineNum, syllableNum) {
     return {
-        done: function() {
-            return lineNum === verseLength && syllableNum === 0;
-        },
+        done: lineNum === verseLength && syllableNum === 0,
         step: function() {
             var wp = randomWord();
             var w = wp[0], p = wp[1];
@@ -245,7 +243,7 @@ function versify(takeVerse) {
             var state = states[states.length-1].step();
             if (state !== null) {
                 states.push(state);
-                if (state.done()) {
+                if (state.done) {
                     takeVerse(emit(states));
                     return;
                 }
