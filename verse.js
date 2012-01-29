@@ -38,8 +38,38 @@ var allPhones = decodeSequence(dictionary.phones);
 
 // Pick a word along with its pronunciation.
 function randomWord() {
-    var n = Math.floor(Math.random() * allWords.length);
+    var n = pickInt(allWords.length);
     return [allWords[n], allPhones[n]];
+}
+
+function pickInt(n) {
+    return Math.floor(Math.random() * n);
+}
+
+function pickOne(xs) {
+    return xs[pickInt(xs.length)];
+}
+
+
+var stops  = ".....??!";
+var pauses = ",,;:";
+
+function randomStop() {
+    return pickOne(stops);
+}
+
+function randomPunct() {
+    switch (pickInt(4)) {
+    case 0:
+    case 1:
+        return '';
+    case 2:
+        return pickOne(pauses);
+    case 3:
+        return randomStop();
+    default:
+        throw "Unreachable";
+    }
 }
 
 
@@ -51,7 +81,7 @@ function checkMeter(syllableNum, phones) {
         var ph = phones[i];
         var last = ph[ph.length-1];
         if ('0' <= last && last <= '2') {
-            if (syllableNum % 2 == 0 && last !== '0')
+            if (syllableNum % 2 === 0 && last !== '0')
                 return null;
             ++syllableNum;
         }
@@ -166,25 +196,35 @@ function makeVerseState(word, line, lineNum, syllableNum) {
             var syllableAfter = checkMeter(syllableNum, p);
             if (syllableAfter === null || 11 < syllableAfter)
                 return null;
-            else if (syllableAfter < 10)
+            if (syllableNum === 0)
+                w = capitalize(w);
+            if (syllableAfter < 10) {
+                if (0 < syllableAfter && 0 === pickInt(40))
+                    w += ',';
                 return makeVerseState(w, line.concat(p), lineNum, syllableAfter);
-            else {
+            } else {
                 line = line.concat(p);
                 if (!rhymesOK(lineNum, line, syllableAfter))
                     return null;
+                w += (lineNum+1 === 14 ? randomStop() : randomPunct());
                 linePhones[lineNum] = line;
                 lineLengths[lineNum] = syllableAfter;
                 return makeVerseState(w, [], lineNum+1, 0);
             }
         },
         emit: function() {
-            if (syllableNum === 0 && 0 < lineNum && lineNum < verseLength)
-                return word + '<br>' + (lineNum == 12 || lineNum == 13 ? '&nbsp;&nbsp;' : '');
-            else
+            if (syllableNum === 0 && 0 < lineNum && lineNum < verseLength) {
+                var indent = lineNum === 12 || lineNum === 13;
+                return word + '<br>' + (indent ? '&nbsp;&nbsp;' : '');
+            } else
                 return word;
         },
     };
 };
+
+function capitalize(word) {
+    return word[0].toUpperCase() + word.substr(1);
+}
 
 var startVersify = makeVerseState('', [], 0, 0);
 
