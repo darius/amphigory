@@ -51,8 +51,8 @@ function pickOne(xs) {
 }
 
 
-var stops  = ".....??!";
-var pauses = ",,;:";
+var stops  = ".......??!";
+var pauses = ",,;:-";
 
 function randomStop() {
     return pickOne(stops);
@@ -64,7 +64,8 @@ function randomPunct() {
     case 1:
         return '';
     case 2:
-        return pickOne(pauses);
+        var p = pickOne(pauses);
+        return p === '-' ? ' &mdash;' : p;
     case 3:
         return randomStop();
     default:
