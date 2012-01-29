@@ -7,6 +7,12 @@ TODO: omit 0-syllable words like MMMMMM -- I guess.
 
 import string, sys
 
+capitals = dict((word.lower(), word)
+                for word in open('capitalize').read().splitlines()
+                if word.lower() != word)
+
+deleteme = set(open('deleteme').read().splitlines())
+
 # common_words.txt is in descending order of frequency;
 # let's take only the most common.
 common_words = set(line.split()[0]
@@ -42,6 +48,8 @@ for line in open('../languagetoys/cmudict.0.7a'):
          continue         # Ignore alternative pronunciations, for now
     word = word.lower()
     phones = phones.split()
+    if word in deleteme:
+        continue
     if not is_potentially_iambic(phones):
         logfile = allstressed if are_all_stressed(phones) else uniambic
         logfile.write(word + '\n')
@@ -81,6 +89,7 @@ words, phones = [], []
 wprev, pprev = None, None
 for w, p in sorted(pronunciations.items()):
     p = '-'.join(p)
+    if w in capitals: w = capitals[w]
     append(words, wprev, w);  wprev = w
     append(phones, pprev, p); pprev = p
 
