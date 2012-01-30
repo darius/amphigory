@@ -54,11 +54,11 @@ function pickOne(xs) {
 var stops  = ".......??!";
 var pauses = ",,;:-";
 
-function randomStop() {
+function pickStop() {
     return pickOne(stops);
 }
 
-function randomPunct() {
+function pickPunct() {
     switch (pickInt(4)) {
     case 0:
     case 1:
@@ -67,7 +67,7 @@ function randomPunct() {
         var p = pickOne(pauses);
         return p === '-' ? ' &mdash;' : p;
     case 3:
-        return randomStop();
+        return pickStop();
     default:
         throw "Unreachable";
     }
@@ -207,7 +207,7 @@ function makeVerseState(word, line, lineNum, syllableNum) {
                 line = line.concat(p);
                 if (!rhymesOK(lineNum, line, syllableAfter))
                     return null;
-                w += (lineNum+1 === 14 ? randomStop() : randomPunct());
+                w += (lineNum+1 === 14 ? pickStop() : pickPunct());
                 linePhones[lineNum] = line;
                 lineLengths[lineNum] = syllableAfter;
                 return makeVerseState(w, [], lineNum+1, 0);
