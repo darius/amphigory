@@ -51,8 +51,9 @@ function pickOne(xs) {
 }
 
 
-var stops  = ".......??!";
+var stops  = "...............????!";
 var pauses = ",,;:-";
+var internalPunct = ",,,,,,,,,,,;;;::---!?";
 
 function pickStop() {
     return pickOne(stops);
@@ -71,6 +72,11 @@ function pickPunct() {
     default:
         throw "Unreachable";
     }
+}
+
+function pickInternalPunct() {
+    var p = pickOne(internalPunct);
+    return p === '-' ? ' &mdash;' : p;
 }
 
 
@@ -200,8 +206,8 @@ function makeVerseState(word, line, lineNum, syllableNum) {
             if (syllableNum === 0)
                 w = capitalize(w);
             if (syllableAfter < 10) {
-                if (0 < syllableAfter && 0 === pickInt(40))
-                    w += ',';
+                if (0 < syllableAfter && 0 === pickInt(33))
+                    w += pickInternalPunct();
                 return makeVerseState(w, line.concat(p), lineNum, syllableAfter);
             } else {
                 line = line.concat(p);
