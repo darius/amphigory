@@ -316,5 +316,8 @@ function emit(states) {
     var parts = [];
     for (var i = 0; i < states.length; ++i)
         parts.push(states[i].emit());
-    return parts.join(' ');
+    var result = parts.join(' ');
+    for (var nlines = result.match(/<br>/g).length; nlines < 14; ++nlines)
+        result += '<br>';
+    return result;
 }
