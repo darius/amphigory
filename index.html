@@ -2,12 +2,14 @@
   <title>A sonnet</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <style type="text/css">
-body { margin: 7em }
+body { margin: 5em 7em }
   </style>
 </head><body>
   <h1><span id="title">A sonnet</span></h1>
   <p id="verse"><span style="font-size: smaller">[Excuse me a moment while I invoke the muse...]</div>
-  <p><br><input id="another" type="submit" value="Another?" disabled>
+  <p><br><input id="another" type="submit" value="Give me any old sonnet">
+  <p><form><input id="composetitled" type="submit" value="Compose a sonnet titled:">
+    <input id="anothertitle" type="text" size="30"></form>
   <hr>
   <div id="footer" style="font-size: smaller">
   <a href="http://github.com/darius/amphigory">Source code</a> on
@@ -37,9 +39,11 @@ function decodeParams(url) {
     return result;
 }
 
-var title   = document.getElementById('title');
-var output  = document.getElementById('verse');
-var another = document.getElementById('another');
+var title         = document.getElementById('title');
+var output        = document.getElementById('verse');
+var another       = document.getElementById('another');
+var anothertitle  = document.getElementById('anothertitle');
+var composetitled = document.getElementById('composetitled');
 
 function setTitle(text) {
     title.replaceChild(document.createTextNode(text),
@@ -56,17 +60,16 @@ function updateVerse() {
     output.innerHTML = emit(states);
 }
 
-function invokeTheMuse() {
-    another.disabled = true;
+function invokeTheMuse(title) {
     if (updateIntervalId) clearInterval(updateIntervalId);
+    if (title) setTitle(title);
     updateIntervalId = setInterval(updateVerse, 50);
     versify(function(result) { 
         if (updateIntervalId) clearInterval(updateIntervalId);
         output.innerHTML = result;
-        another.disabled = false;
     });
 }
-invokeTheMuse();
+invokeTheMuse(null);
 
 function randomTitle() {
     return 'Sonnet ' + numberWithCommas(pickInt(Math.pow(2, 48)));
@@ -79,8 +82,12 @@ function numberWithCommas(x) {
 
 another.onclick = function() {
     Math.seedrandom(new Date().getTime());
-    setTitle(randomTitle());
-    invokeTheMuse();
+    invokeTheMuse(randomTitle());
+    return false;
+};
+
+composetitled.onclick = function() {
+    invokeTheMuse(anothertitle.value);
     return false;
 };
   </script>
