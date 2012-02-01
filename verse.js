@@ -182,6 +182,7 @@ function sansStress(phone) {
 // rhyme with line 0, and line 2 OTOH must rhyme with line 0.
 var rhymeLines = [[],[], [0],[1],[],[],[4],[5],[],[],[8],[9],[],    [12]];
 var antiLines  = [[],[0],[], [], [],[4],[],[], [],[8],[],[],  [8,9],[]];
+var lineIndent = ['', '', '','', '', '','','', '', '','','', '&nbsp;&nbsp;', '&nbsp;&nbsp;'];
 
 var verseLength = rhymeLines.length;
 
@@ -220,10 +221,9 @@ function makeVerseState(word, line, lineNum, syllableNum) {
             }
         },
         emit: function() {
-            if (syllableNum === 0 && 0 < lineNum && lineNum < verseLength) {
-                var indent = lineNum === 12 || lineNum === 13;
-                return word + '<br>' + (indent ? '&nbsp;&nbsp;' : '');
-            } else
+            if (syllableNum === 0 && 0 < lineNum && lineNum < verseLength)
+                return word + '<br>' + lineIndent[lineNum];
+            else
                 return word;
         },
     };
