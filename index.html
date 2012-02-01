@@ -36,11 +36,13 @@ function decodeParams(url) {
     return result;
 }
 
+var title   = document.getElementById('title');
 var output  = document.getElementById('verse');
 var another = document.getElementById('another');
 
 function setTitle(text) {
-    document.getElementById('title').innerHTML = text;  // XXX plaintext instead
+    title.replaceChild(document.createTextNode(text),
+                       title.firstChild);
     Math.seedrandom(text);
 }
 
