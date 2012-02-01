@@ -20,6 +20,9 @@ common_words = set(line.split()[0]
 
 good_starts = "'" + string.ascii_uppercase
 
+def has_some_actual_syllables(phones):
+    return any(phone[-1] in '012' for phone in phones)
+
 def is_potentially_iambic(phones):
     beats = [phone for phone in phones if phone[-1] in '012']
     stress_parities = set(i % 2 for i, phone in enumerate(beats)
@@ -50,7 +53,7 @@ for line in open('../languagetoys/cmudict.0.7a'):
     phones = phones.split()
     if word in deleteme:
         continue
-    if not is_potentially_iambic(phones):
+    if not (is_potentially_iambic(phones) and has_some_actual_syllables(phones)):
         logfile = allstressed if are_all_stressed(phones) else uniambic
         logfile.write(word + '\n')
         continue
