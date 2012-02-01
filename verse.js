@@ -214,7 +214,7 @@ function makeVerseState(word, line, lineNum, syllableNum) {
                 line = line.concat(p);
                 if (!rhymesOK(lineNum, line, syllableAfter))
                     return null;
-                w += (lineNum+1 === 14 ? pickStop() : pickPunct());
+                w += (lineNum+1 === verseLength ? pickStop() : pickPunct());
                 linePhones[lineNum] = line;
                 lineLengths[lineNum] = syllableAfter;
                 return makeVerseState(w, [], lineNum+1, 0);
@@ -317,7 +317,8 @@ function emit(states) {
     for (var i = 0; i < states.length; ++i)
         parts.push(states[i].emit());
     var result = parts.join(' ');
-    for (var nlines = result.match(/<br>/g).length; nlines < 14; ++nlines)
+    var nlines = result.match(/<br>/g).length;
+    for (; nlines < verseLength; ++nlines)
         result += '<br>';
     return result;
 }
