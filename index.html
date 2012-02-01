@@ -5,8 +5,7 @@
 body { margin: 7em }
   </style>
 </head><body>
-  <h1>A sonnet</h1>
-  <i>(just for you)</i>
+  <h1><span id="title">A sonnet</span></h1>
   <p id="verse"><span style="font-size: smaller">[Excuse me a moment while I invoke the muse...]</div>
   <p><br><input id="another" type="submit" value="Another?" disabled>
   <hr>
@@ -20,11 +19,33 @@ body { margin: 7em }
   <a href="http://wry.me/blog/">Darius Bacon</a><br/></em></div>
 
   <script src="pronounce_iamb_compat.js"></script>
+  <script src="seedrandom.js"></script>
   <script src="verse.js"></script>
   <script type="text/javascript">
 
+function decodeParams(url) {
+    var result = {};
+    var qmark = url.indexOf('?');
+    if (0 <= qmark) {
+        var pairs = url.substring(qmark+1, url.length).split('&');
+        for (var i = 0; i < pairs.length; ++i) {
+	    var kv = pairs[i].split('=', 2);
+	    result[decodeURIComponent(kv[0])] = decodeURIComponent(kv[1]);
+        }
+    }
+    return result;
+}
+
 var output  = document.getElementById('verse');
 var another = document.getElementById('another');
+
+function setTitle(text) {
+    document.getElementById('title').innerHTML = text;  // XXX plaintext instead
+    Math.seedrandom(text);
+}
+
+var params = decodeParams(document.URL);
+if (params.title) setTitle(params.title);
 
 var updateIntervalId;
 
@@ -41,11 +62,24 @@ function invokeTheMuse() {
         output.innerHTML = result;
         another.disabled = false;
     });
-    return false;
 }
 invokeTheMuse();
 
-another.onclick = invokeTheMuse;
+function randomTitle() {
+    return 'Sonnet ' + numberWithCommas(pickInt(Math.pow(2, 48)));
+}
+
+// http://stackoverflow.com/questions/2901102/how-to-print-number-with-commas-as-thousands-separators-in-javascript
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+another.onclick = function() {
+    Math.seedrandom(new Date().getTime());
+    setTitle(randomTitle());
+    invokeTheMuse();
+    return false;
+};
   </script>
 
 </body></html>
