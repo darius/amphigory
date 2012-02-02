@@ -323,6 +323,9 @@ function emit(states) {
     return dumbQuote(result);
 }
 
+// Convert ASCII apostrophe to better-looking right single quotation mark.
+// Weird, since the latter looks like an apostrophe and the former doesn't,
+// but whatever.
 function dumbQuote(string) {
-    return string.replace(/'/g, '&#8217;');
+    return string.replace(/'/g, "\u2019");
 }

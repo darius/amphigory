@@ -57,7 +57,7 @@ var anothertitle  = document.getElementById('anothertitle');
 var composetitled = document.getElementById('composetitled');
 
 function setTitle(text) {
-    title.replaceChild(document.createTextNode(text),
+    title.replaceChild(document.createTextNode(dumbQuote(text)),
                        title.firstChild);
     Math.seedrandom(text);
 }
