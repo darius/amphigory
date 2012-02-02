@@ -320,5 +320,9 @@ function emit(states) {
     var nlines = result.match(/<br>/g).length;
     for (; nlines < verseLength; ++nlines)
         result += '<br>';
-    return result;
+    return dumbQuote(result);
+}
+
+function dumbQuote(string) {
+    return string.replace(/'/g, '&#8217;');
 }
