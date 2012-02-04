@@ -12,6 +12,7 @@ capitals = dict((word.lower(), word)
                 if word.lower() != word)
 
 deleteme = set(open('deleteme').read().splitlines())
+addme    = set(open('addme').read().splitlines())
 
 # common_words.txt is in descending order of frequency;
 # let's take only the most common.
@@ -57,7 +58,7 @@ for line in open('../languagetoys/cmudict.0.7a'):
         logfile = allstressed if are_all_stressed(phones) else uniambic
         logfile.write(word + '\n')
         continue
-    if word not in common_words:
+    if word not in common_words and word not in addme:
         uncommon.write(word + '\n')
         continue
     included.write(word + '\n')
