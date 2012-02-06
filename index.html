@@ -12,7 +12,95 @@ body {
     font-size: smaller;
 }
   </style>
-</head><body>
+
+  <script src="seedrandom.js"></script>
+  <script type="text/javascript">
+'use strict';
+
+window.onload = function() {
+
+function randomTitle() {
+    Math.seedrandom(new Date().getTime());
+    return 'Sonnet ' + numberWithCommas(pickInt(Math.pow(2, 48)));
+}
+
+// http://stackoverflow.com/questions/2901102/how-to-print-number-with-commas-as-thousands-separators-in-javascript
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function pushTitle(text) {
+    location.hash = 'title=' + text;
+    setTitle(text);
+}
+
+function getTitle() {
+    return location.hash.toString().substring(1).replace(/title=/, '');
+}
+
+window.onhashchange = function() {
+    setTitle(getTitle());
+};
+
+function setTitle(text) {
+    title.replaceChild(document.createTextNode(dumbQuote(text)),
+                       title.firstChild);
+    Math.seedrandom(text);
+    invokeTheMuse(text);
+}
+
+var updateIntervalId;
+var verseCache = {};
+
+function invokeTheMuse(title) {
+    if (updateIntervalId)
+        clearInterval(updateIntervalId);
+    var cached = verseCache['title=' + title];
+    if (cached) {
+        verse.innerHTML = cached;
+        return;
+    }
+    function updateVerse() {
+        verse.innerHTML = emit(states);
+    }
+    updateIntervalId = setInterval(updateVerse, 50);
+    versify(function(result) { 
+        if (updateIntervalId)
+            clearInterval(updateIntervalId);
+        verse.innerHTML = result;
+        verseCache['title=' + title] = result;
+    });
+}
+
+var title         = document.getElementById('title');
+var verse         = document.getElementById('verse');
+var another       = document.getElementById('another');
+var anothertitle  = document.getElementById('anothertitle');
+var composetitled = document.getElementById('composetitled');
+
+if (location.hash === '')
+    location.replace(document.URL + '#title=' + randomTitle());  // XXX need to encode anything?
+// XXX apparently it's not adding to the history? check this...
+// XXX also #Top is a special case so I should prefix to avoid it
+
+another.onclick = function() {
+    pushTitle(randomTitle());
+    return false;
+};
+
+composetitled.onclick = function() {
+    pushTitle(anothertitle.value);
+    return false;
+};
+
+setTitle(getTitle());
+
+};
+  </script>
+
+</head>
+<body>
+
   <h1><span id="title">A sonnet</span></h1>
   <p id="verse"><span style="font-size: smaller">[Excuse me a moment while I invoke the muse...]</div>
 
@@ -32,75 +120,5 @@ body {
   </div>
 
   <script src="pronounce_iamb_compat.js"></script>
-  <script src="seedrandom.js"></script>
   <script src="verse.js"></script>
-  <script type="text/javascript">
-'use strict';
-
-function decodeParams(url) {
-    var result = {};
-    var qmark = url.indexOf('?');
-    if (0 <= qmark) {
-        var pairs = url.substring(qmark+1, url.length).split('&');
-        for (var i = 0; i < pairs.length; ++i) {
-	    var kv = pairs[i].split('=', 2);
-	    result[decodeURIComponent(kv[0])] = decodeURIComponent(kv[1]);
-        }
-    }
-    return result;
-}
-
-var title         = document.getElementById('title');
-var output        = document.getElementById('verse');
-var another       = document.getElementById('another');
-var anothertitle  = document.getElementById('anothertitle');
-var composetitled = document.getElementById('composetitled');
-
-function setTitle(text) {
-    title.replaceChild(document.createTextNode(dumbQuote(text)),
-                       title.firstChild);
-    Math.seedrandom(text);
-}
-
-var params = decodeParams(document.URL);
-if (params.title) setTitle(params.title);
-
-var updateIntervalId;
-
-function updateVerse() {
-    output.innerHTML = emit(states);
-}
-
-function invokeTheMuse(title) {
-    if (updateIntervalId) clearInterval(updateIntervalId);
-    if (title) setTitle(title);
-    updateIntervalId = setInterval(updateVerse, 50);
-    versify(function(result) { 
-        if (updateIntervalId) clearInterval(updateIntervalId);
-        output.innerHTML = result;
-    });
-}
-invokeTheMuse(null);
-
-function randomTitle() {
-    return 'Sonnet ' + numberWithCommas(pickInt(Math.pow(2, 48)));
-}
-
-// http://stackoverflow.com/questions/2901102/how-to-print-number-with-commas-as-thousands-separators-in-javascript
-function numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
-another.onclick = function() {
-    Math.seedrandom(new Date().getTime());
-    invokeTheMuse(randomTitle());
-    return false;
-};
-
-composetitled.onclick = function() {
-    invokeTheMuse(anothertitle.value);
-    return false;
-};
-  </script>
-
 </body></html>
