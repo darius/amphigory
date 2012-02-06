@@ -35,7 +35,7 @@ function pushTitle(text) {
 }
 
 function getTitle() {
-    return location.hash.toString().substring(1).replace(/title=/, '');
+    return location.hash.toString().substring(1).replace(/^title=/, '');
 }
 
 window.onhashchange = function() {
