@@ -283,16 +283,15 @@ function versify(takeVerse) {
     var nfail = 0;
     states = [startVersify];
 
-    setTimeout(keepScribbling, 0);
-    function keepScribbling() {
+    var keepScribbling = function() {
         // When fuel runs out, yield this timeslice.
-        for (var fuel = 1000; 0 < fuel; --fuel) {
+        for (var fuel = 2000; 0 < fuel; --fuel) {
             var state = states[states.length-1].step();
             if (state !== null) {
                 states.push(state);
                 if (state.done) {
                     takeVerse(emit(states));
-                    return;
+                    return false;
                 }
             } else {
                 ++nfail;
@@ -307,9 +306,26 @@ function versify(takeVerse) {
                         break;
             }
         }
-        setTimeout(keepScribbling, 0);
-    }
+        return true;
+    };
+
+    return repeatedly(keepScribbling, 0);
 }
+
+function repeatedly(work, interval) {
+    function again() {
+        if (work())
+            timeoutID = setTimeout(again, interval);
+    }
+    function stop() {
+        clearTimeout(timeoutID);
+        timeoutID = null;
+    }
+    var timeoutID = setTimeout(again, interval);
+    return stop;
+}
+
+function noOp() { }
 
 // Return the verse text as far as it's currently composed.
 function emit(states) {

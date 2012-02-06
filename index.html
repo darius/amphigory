@@ -49,27 +49,30 @@ function setTitle(text) {
     invokeTheMuse(text);
 }
 
-var updateIntervalId;
+var stopVersifier = noOp, stopUpdater = noOp;
 var verseCache = {};
 
 function invokeTheMuse(title) {
-    if (updateIntervalId)
-        clearInterval(updateIntervalId);
+    stopVersifier();
+    stopUpdater();
     var cached = verseCache['title=' + title];
+    console.log('cached ', title, ': ', cached);
     if (cached) {
         verse.innerHTML = cached;
         return;
     }
     function updateVerse() {
         verse.innerHTML = emit(states);
+        return true;
     }
-    updateIntervalId = setInterval(updateVerse, 50);
-    versify(function(result) { 
-        if (updateIntervalId)
-            clearInterval(updateIntervalId);
+    stopVersifier = versify(function(result) { 
+        stopVersifier();
+        stopUpdater();
         verse.innerHTML = result;
         verseCache['title=' + title] = result;
+        console.log('cache ', title, ': ', result);
     });
+    stopUpdater = repeatedly(updateVerse, 50);
 }
 
 var title         = document.getElementById('title');
