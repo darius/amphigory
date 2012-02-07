@@ -283,8 +283,7 @@ function versify(takeVerse) {
     var nfail = 0;
     states = [startVersify];
 
-    var keepScribbling = function() {
-        // When fuel runs out, yield this timeslice.
+    return repeatedly(function() {
         for (var fuel = 2000; 0 < fuel; --fuel) {
             var state = states[states.length-1].step();
             if (state !== null) {
@@ -306,22 +305,29 @@ function versify(takeVerse) {
                         break;
             }
         }
+        // Fuel's run out -- yield this timeslice and repeat.
         return true;
-    };
-
-    return repeatedly(keepScribbling, 0);
+    });
 }
 
+// Call work() repeatedly, on a timeout interval, until it returns true.
+// You can call the value returned from repeatedly(...) to stop the work early.
 function repeatedly(work, interval) {
+    function schedule() {
+        timeoutID = setTimeout(again, interval || 0);
+    }
     function again() {
         if (work())
-            timeoutID = setTimeout(again, interval);
+            schedule();
+        else
+            timeoutID = null;
     }
     function stop() {
         clearTimeout(timeoutID);
         timeoutID = null;
     }
-    var timeoutID = setTimeout(again, interval);
+    var timeoutID;
+    schedule();
     return stop;
 }
 
