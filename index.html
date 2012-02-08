@@ -78,7 +78,6 @@ function invokeTheMuse(title) {
     stopVersifier();
     stopUpdater();
     var cached = verseCache['title=' + title];
-    console.log('cached ', title, ': ', cached);
     if (cached) {
         verse.innerHTML = cached;
         return;
@@ -92,7 +91,6 @@ function invokeTheMuse(title) {
         stopUpdater();
         verse.innerHTML = result;
         verseCache['title=' + title] = result;
-        console.log('cache ', title, ': ', result);
     });
     stopUpdater = repeatedly(updateVerse, 50);
 }
