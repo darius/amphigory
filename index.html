@@ -44,7 +44,7 @@ function randomTitle() {
     return 'Sonnet ' + numberWithCommas(pickInt(Math.pow(2, 45)));
 }
 
-// http://stackoverflow.com/questions/2901102/how-to-print-number-with-commas-as-thousands-separators-in-javascript
+// From http://stackoverflow.com/questions/2901102
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
@@ -52,23 +52,22 @@ function numberWithCommas(x) {
 function pushTitle(text) {
     location.hash = 'title=' + text;
     setTitle(text);
-    permalink.href = location.href;
-}
-
-function getTitle() {
-    return location.hash.toString().substring(1).replace(/^title=/, '');
 }
 
 window.onhashchange = function() {
     setTitle(getTitle());
-    permalink.href = location.href;
 };
+
+function getTitle() {
+    return location.hash.toString().substring(1).replace(/^title=/, '');
+}
 
 function setTitle(text) {
     title.replaceChild(document.createTextNode(dumbQuote(text)),
                        title.firstChild);
     Math.seedrandom(text);
     invokeTheMuse(text);
+    permalink.href = location.href;
 }
 
 var stopVersifier = noOp, stopUpdater = noOp;
@@ -119,7 +118,6 @@ composetitled.onclick = function() {
 };
 
 setTitle(getTitle());
-permalink.href = location.href;
 
 };
   </script>
