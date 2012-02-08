@@ -81,16 +81,14 @@ function invokeTheMuse(title) {
         verse.innerHTML = cached;
         return;
     }
-    function updateVerse() {
-        verse.innerHTML = emit(states);
-        return true;
-    }
     stopVersifier = versify(function(result) { 
-        stopVersifier();
         stopUpdater();
         verse.innerHTML = result;
         verseCache['title=' + title] = result;
     });
+    function updateVerse() {
+        verse.innerHTML = emit(states);
+    }
     stopUpdater = repeatedly(updateVerse, 50);
 }
 

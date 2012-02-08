@@ -283,14 +283,15 @@ function versify(takeVerse) {
     var nfail = 0;
     states = [startVersify];
 
-    return repeatedly(function() {
+    var stop = repeatedly(function() {
         for (var fuel = 2000; 0 < fuel; --fuel) {
             var state = states[states.length-1].step();
             if (state !== null) {
                 states.push(state);
                 if (state.done) {
                     takeVerse(emit(states));
-                    return false;
+                    stop();
+                    return;
                 }
             } else {
                 ++nfail;
@@ -305,9 +306,8 @@ function versify(takeVerse) {
                         break;
             }
         }
-        // Fuel's run out -- yield this timeslice and repeat.
-        return true;
     });
+    return stop;
 }
 
 // Call work() repeatedly, on a timeout interval, until it returns true.
@@ -317,10 +317,9 @@ function repeatedly(work, interval) {
         timeoutID = setTimeout(again, interval || 0);
     }
     function again() {
-        if (work())
+        work();
+        if (timeoutID !== null)
             schedule();
-        else
-            timeoutID = null;
     }
     function stop() {
         clearTimeout(timeoutID);
