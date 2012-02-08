@@ -3,16 +3,36 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <link href='http://fonts.googleapis.com/css?family=Lusitana:400,700' rel='stylesheet' type='text/css'>
   <style type="text/css">
-body { 
-    margin: 5em 7em;
-    font-family: 'Lusitana', Georgia, serif;
-    font-size: 110%;
-}
-.footer {
-    font-size: smaller;
-}
+    body {
+         padding-top:     5em;
+         padding-bottom:  5em;
+         padding-left:    7em;
+         font-family: 'Lusitana', Georgia, serif;
+     }
+     h1 {
+         font-size: 2.2em;
+     }
+     .poem {
+         width: 25em;
+         padding-right:   3em;
+         font-size: 110%;
+     }
+    .right {
+         background: #cc9258;
+         font-family: Verdana, sans-serif;
+     }
+     .wtf {
+         background: #7d2a35;
+         font-size: 85%;
+         color: #feffc2;
+     }
+     input { background: #feffc2; }
+     a { color: #bfba6c; }
+     a:link {text-decoration:none;}
+     a:visited {text-decoration:none;}
+     a:hover {text-decoration:underline;}
+     a:active {text-decoration:underline;}
   </style>
-
   <script src="seedrandom.js"></script>
   <script type="text/javascript">
 'use strict';
@@ -32,6 +52,7 @@ function numberWithCommas(x) {
 function pushTitle(text) {
     location.hash = 'title=' + text;
     setTitle(text);
+    permalink.href = location.href;
 }
 
 function getTitle() {
@@ -40,6 +61,7 @@ function getTitle() {
 
 window.onhashchange = function() {
     setTitle(getTitle());
+    permalink.href = location.href;
 };
 
 function setTitle(text) {
@@ -80,11 +102,13 @@ var verse         = document.getElementById('verse');
 var another       = document.getElementById('another');
 var anothertitle  = document.getElementById('anothertitle');
 var composetitled = document.getElementById('composetitled');
+var permalink     = document.getElementById('permalink');
 
-if (location.hash === '')
-    location.replace(document.URL + '#title=' + randomTitle());  // XXX need to encode anything?
+if (location.hash === '') {
+    var url = document.URL + '#title=' + randomTitle();  // XXX need to encode anything?
+    location.replace(url);
 // XXX apparently it's not adding to the history? check this...
-// XXX also #Top is a special case so I should prefix to avoid it
+}
 
 another.onclick = function() {
     pushTitle(randomTitle());
@@ -97,31 +121,47 @@ composetitled.onclick = function() {
 };
 
 setTitle(getTitle());
+permalink.href = location.href;
 
 };
   </script>
-
 </head>
 <body>
-
   <h1><span id="title">A sonnet</span></h1>
-  <p id="verse"><span style="font-size: smaller">[Excuse me a moment while I invoke the muse...]</div>
-
-  <p><br><input id="another" type="submit" value="Give me another">
-  <p><form><input id="composetitled" type="submit" value="Compose a sonnet titled:">
-    <input id="anothertitle" type="text" size="30"></form>
-  <hr>
-
-  <div class="footer">
-    <a href="http://github.com/darius/amphigory">Source code</a> on
-    GitHub. Also I commend
-    <a href="http://books.google.com/books?id=kWElP9YZkzQC&pg=PA43&lpg=PA43&dq=trurl%27s+electronic+bard">Trurl's
-      Electronic Bard</a> to your attention.
-
-    <p><em>Copyright &#169; 2012
-        <a href="http://wry.me/blog/">Darius Bacon</a><br/></em>
-  </div>
-
+  <table>
+    <tr>
+      <td class="left">
+        <div class="poem">
+          <p id="verse"><span style="font-size: smaller">[Excuse me a moment while I invoke the muse...]</div>
+      </td>
+      <td>
+        <div class="right">
+        <table cellpadding=12 cellspacing=12>
+          <tr class="wtf"><td>
+            <a id="another" href="#">Make another sonnet.</a>
+            <p><form>
+                <label>Compose one titled:</label><br>
+                <input id="anothertitle" type="text" size="20">
+                <input id="composetitled" type="submit" value="Go">
+              </form>
+              <p><a id="permalink" href="">Permalink</a> to this verse.
+          </tr>
+          <tr class="wtf"><td>
+            <a href="http://github.com/darius/amphigory">How does it work?</a>
+            
+            <p>Read the tale of
+              <a href="http://books.google.com/books?id=kWElP9YZkzQC&pg=PA43&lpg=PA43&dq=trurl%27s+electronic+bard">Trurl's
+                Electronic Bard.</a>
+          </tr>
+          <tr class="wtf"><td>
+            Copyright &#169; 2012
+              <a href="http://wry.me/blog/">Darius Bacon</a>
+          </tr>
+        </table>
+        </div>
+      </td>
+    </tr>
+  </table>
   <script src="pronounce_iamb_compat.js"></script>
   <script src="verse.js"></script>
 </body></html>
