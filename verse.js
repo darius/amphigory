@@ -10,23 +10,15 @@
 // Decompress a string compressed by convert_cmudict.py, producing an array.
 function decodeSequence(s) {
     var strings = s.split(' ');
-    var prev = null;
-    for (var i = 0; i < strings.length; ++i) {
-        if (prev !== null)
-            prev = strings[i] = decode(prev, strings[i]);
-        else
-            prev = s;
-    }
+    for (var i = 1; i < strings.length; ++i)
+        strings[i] = decode(strings[i-1], strings[i]);
     return strings;
 }
 
 // Expand a string s using the common prefix from the previous string.
 function decode(prev, s) {
     var n = parseInt(s[0]);
-    if (isNaN(n))
-        return s;
-    else
-        return prev.substr(0, n) + s.substr(1);
+    return isNaN(n) ? s : prev.substr(0, n) + s.substr(1);
 }
 
 var allWords  = decodeSequence(dictionary.words);
@@ -35,6 +27,7 @@ var allPhones = decodeSequence(dictionary.phones);
     for (var i = 0; i < allPhones.length; ++i)
         allPhones[i] = [' '].concat(allPhones[i].split('-'));
 })();
+
 
 // Pick a word along with its pronunciation.
 function randomWord() {
