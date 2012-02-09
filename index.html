@@ -44,7 +44,7 @@
 
      .font4 { font-family: 'Open Sans', sans-serif; font-size: 100%; }
 
-     .font5 { font-family: 'La Belle Aurore', cursive; font-size: 125%; }
+     .font5 { font-family: 'La Belle Aurore', cursive; font-size: 125%; line-height: 160%; }
      #title.font5 { font-weight: normal; }
 
      .font6 { font-family: 'Mrs Saint Delafield', cursive; font-size: 150%; line-height: 125%; }
@@ -140,6 +140,7 @@ another.onclick = function() {
 
 composetitled.onclick = function() {
     pushTitle(anothertitle.value);
+    anothertitle.value = '';
     return false;
 };
 
