@@ -1,7 +1,8 @@
 <html><head>
   <title>A sonnet</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <link href='http://fonts.googleapis.com/css?family=Lusitana:400,700' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Lusitana:400,700|Just+Another+Hand|Reenie+Beanie|Open+Sans:400,700|La+Belle+Aurore|Mrs+Saint+Delafield'
+        rel='stylesheet' type='text/css'>
   <style type="text/css">
     body {
          padding-top:     5em;
@@ -13,7 +14,7 @@
          font-size: 2.2em;
      }
      .poem {
-         width: 25em;
+         width: 28em;
          padding-right:   3em;
          font-size: 110%;
      }
@@ -32,6 +33,24 @@
      a:visited {text-decoration:none;}
      a:hover {text-decoration:underline;}
      a:active {text-decoration:underline;}
+
+     .font1 { font-family: 'Lusitana', Georgia, serif; font-size: 110%; }
+
+     .font2 { font-family: 'Just Another Hand', cursive; font-size: 175%; }
+     #title.font2 { font-weight: normal; }
+
+     .font3 { font-family: 'Reenie Beanie', cursive; font-size: 150%; }
+     #title.font3 { font-weight: normal; }
+
+     .font4 { font-family: 'Open Sans', sans-serif; font-size: 100%; }
+
+     .font5 { font-family: 'La Belle Aurore', cursive; font-size: 125%; }
+     #title.font5 { font-weight: normal; }
+
+     .font6 { font-family: 'Mrs Saint Delafield', cursive; font-size: 150%; line-height: 125%; }
+     #title.font6 { font-weight: normal; }
+
+     .font7 { font-family: 'Courier New', 'Courier', fixed; font-size: 100%; }
   </style>
   <script src="seedrandom.js"></script>
   <script type="text/javascript">
@@ -66,8 +85,17 @@ function setTitle(text) {
     title.replaceChild(document.createTextNode(dumbQuote(text)),
                        title.firstChild);
     Math.seedrandom(text);
+    var fontClass = pickFont();
+    verse.className = fontClass;
+    title.className = fontClass;
     invokeTheMuse(text);
     permalink.href = location.href;
+}
+
+function pickFont() {
+    var k = 2 + pickInt(12);
+    if (7 < k) k = 1;
+    return 'font' + k;
 }
 
 var stopVersifier = noOp, stopUpdater = noOp;
@@ -121,12 +149,12 @@ setTitle(getTitle());
   </script>
 </head>
 <body>
-  <h1><span id="title">A sonnet</span></h1>
+  <h1><span id="title" class="font1">A sonnet</span></h1>
   <table>
     <tr>
       <td class="left">
         <div class="poem">
-          <p id="verse"><span style="font-size: smaller">[Excuse me a moment while I invoke the muse...]</div>
+          <p id="verse" class="font1"><span style="font-size: smaller">[Excuse me a moment while I invoke the muse...]</div>
       </td>
       <td>
         <div class="right">
@@ -141,7 +169,7 @@ setTitle(getTitle());
               <p><a id="permalink" href="">Permalink</a> to this verse.
           </tr>
           <tr class="wtf"><td>
-            <a href="http://github.com/darius/amphigory">How does it work?</a>
+            <a href="http://github.com/darius/amphigory">How it works.</a>
             
             <p>Read the tale of
               <a href="http://books.google.com/books?id=kWElP9YZkzQC&pg=PA43&lpg=PA43&dq=trurl%27s+electronic+bard">Trurl's
