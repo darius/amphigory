@@ -5,52 +5,52 @@
         rel='stylesheet' type='text/css'>
   <style type="text/css">
     body {
-         padding-top:     5em;
-         padding-bottom:  5em;
-         padding-left:    7em;
-         font-family: 'Lusitana', Georgia, serif;
-     }
-     h1 {
-         font-size: 2.2em;
-     }
-     .poem {
-         width: 28em;
-         padding-right:   3em;
-         font-size: 110%;
-     }
-    .right {
-         background: #cc9258;
-         font-family: Verdana, sans-serif;
-     }
-     .sidebar {
-         background: #7d2a35;
-         font-size: 85%;
-         color: #feffc2;
-     }
-     input { background: #feffc2; }
-     a { color: #bfba6c; }
-     a:link {text-decoration:none;}
-     a:visited {text-decoration:none;}
-     a:hover {text-decoration:underline;}
-     a:active {text-decoration:underline;}
+        font-family: 'Lusitana', Georgia, serif;
+        padding-top:     4em;
+    }
+    .metaness {
+        background: #cc9258;
+        font-family: Verdana, sans-serif;
+    }
+    .sidebar {
+        background: #7d2a35;
+        font-size: 85%;
+        color: #feffc2;
+    }
+    h1 {
+        font-size: 2.2em;
+    }
+    .poem {
+        padding-left:    4em;
+        font-size: 110%;
+    }
+    .metaness { margin-left: 4em; border-radius: 10px; }
+    td { border-radius: 7px; }
+    a { color: #bfba6c; }
+    a:link {text-decoration:none;}
+    a:visited {text-decoration:none;}
+    a:hover {text-decoration:underline;}
+    a:active {text-decoration:underline;}
 
-     .font1 { font-family: 'Lusitana', Georgia, serif; font-size: 110%; }
+    .font0 { font-family: Verdana, sans-serif; }
 
-     .font2 { font-family: 'Just Another Hand', cursive; font-size: 175%; }
-     #title.font2 { font-weight: normal; }
+    .font1 { font-family: 'Lusitana', Georgia, serif; font-size: 110%; line-height: 125% }
 
-     .font3 { font-family: 'Reenie Beanie', cursive; font-size: 150%; }
-     #title.font3 { font-weight: normal; }
+    .font2 { font-family: 'Just Another Hand', cursive; font-size: 175%; }
+    #title.font2 { font-weight: normal; }
 
-     .font4 { font-family: 'Open Sans', sans-serif; font-size: 100%; }
+    .font3 { font-family: 'Reenie Beanie', cursive; font-size: 150%; }
+    #title.font3 { font-weight: normal; }
 
-     .font5 { font-family: 'La Belle Aurore', cursive; font-size: 125%; line-height: 160%; }
-     #title.font5 { font-weight: normal; }
+    .font4 { font-family: 'Open Sans', sans-serif; font-size: 100%; }
 
-     .font6 { font-family: 'Mrs Saint Delafield', cursive; font-size: 150%; line-height: 125%; }
-     #title.font6 { font-weight: normal; }
+    .font5 { font-family: 'La Belle Aurore', cursive; font-size: 125%; line-height: 160%; }
+    #title.font5 { font-weight: normal; }
 
-     .font7 { font-family: 'Courier New', 'Courier', fixed; font-size: 100%; }
+    .font6 { font-family: 'Mrs Saint Delafield', cursive; font-size: 150%; line-height: 125%; }
+    #title.font6 { font-weight: normal; }
+
+    .font7 { font-family: 'Courier New', 'Courier', fixed; font-size: 100%; text-transform: lowercase; }
   </style>
   <script type="text/javascript">
 'use strict';
@@ -149,16 +149,11 @@ setTitle(getTitle());
   </script>
 </head>
 <body>
-  <h1><span id="title" class="font1">A sonnet</span></h1>
   <table>
     <tr>
-      <td class="left">
-        <div class="poem">
-          <p id="verse" class="font1"><span style="font-size: smaller">[Excuse me a moment while I invoke the muse...]</div>
-      </td>
-      <td>
-        <div class="right">
-        <table cellpadding=12 cellspacing=12>
+      <td valign="top">
+        <div class="metaness">
+        <table cellpadding=10 cellspacing=10>
           <tr class="sidebar"><td>
             <a id="another" href="#">Make another sonnet.</a>
             <p><form>
@@ -169,17 +164,22 @@ setTitle(getTitle());
               <p><a id="permalink" href="">Permalink</a> to this verse.
           </tr>
           <tr class="sidebar"><td>
-            <a href="http://github.com/darius/amphigory">How it works.</a>
-            
-            <p>Read the tale of
-              <a href="http://books.google.com/books?id=kWElP9YZkzQC&pg=PA43&lpg=PA43&dq=trurl%27s+electronic+bard">Trurl's
-                Electronic Bard.</a>
+            Find out <a href="http://github.com/darius/amphigory">how it works.</a>
+            <p>Read 
+              <a href="http://books.google.com/books?id=kWElP9YZkzQC&pg=PA43&lpg=PA43&dq=trurl%27s+electronic+bard">&ldquo;Trurl's
+                Electronic Bard.&rdquo;</a>
           </tr>
           <tr class="sidebar"><td>
-            Copyright &#169; 2012
+            &#169; 2012
               <a href="http://wry.me/blog/">Darius Bacon</a>
           </tr>
         </table>
+        </div>
+      </td>
+      <td>
+        <div class="poem">
+          <h1><span id="title" class="font1"> </span></h1>
+          <p id="verse" class="font0"><span style="font-size: smaller">[Excuse me a moment while I invoke the muse...]
         </div>
       </td>
     </tr>
