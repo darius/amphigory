@@ -53,6 +53,46 @@
 
     .font7 { font-family: 'Courier New', 'Courier', fixed; font-size: 100%; text-transform: lowercase; }
   </style>
+</head>
+<body>
+  <table>
+    <tr>
+      <td valign="top">
+        <div class="metaness">
+        <table cellpadding=10 cellspacing=10>
+          <tr class="sidebar"><td>
+            <input id="another" type="submit" value="Make another sonnet">
+            <p><form>
+                <label>Compose one titled:</label><br>
+                <input id="anothertitle" type="text" size="20">
+                <input id="composetitled" type="submit" value="Go">
+              </form>
+              <p><a id="permalink" href="">Permalink</a> to the verse at right.
+          </tr>
+          <tr class="sidebar"><td>
+            Find out <a href="http://github.com/darius/amphigory">how it works.</a>
+            <p>Read 
+              <a href="http://books.google.com/books?id=kWElP9YZkzQC&pg=PA43&lpg=PA43&dq=trurl%27s+electronic+bard">&ldquo;Trurl's
+                Electronic Bard.&rdquo;</a>
+          </tr>
+          <tr class="sidebar"><td>
+            &#169; 2012
+              <a href="http://wry.me/blog/">Darius Bacon</a>
+          </tr>
+        </table>
+        </div>
+      </td>
+      <td>
+        <div class="poem">
+          <h1><span id="title" class="font1"> </span></h1>
+          <p id="verse" class="font0"><span style="font-size: smaller">[Excuse me a moment while I invoke the muse...]
+        </div>
+      </td>
+    </tr>
+  </table>
+  <script src="seedrandom.js"></script>
+  <script src="pronounce_iamb_compat.js"></script>
+  <script src="verse.js"></script>
   <script type="text/javascript">
 'use strict';
 
@@ -148,44 +188,4 @@ setTitle(getTitle());
 
 };
   </script>
-</head>
-<body>
-  <table>
-    <tr>
-      <td valign="top">
-        <div class="metaness">
-        <table cellpadding=10 cellspacing=10>
-          <tr class="sidebar"><td>
-            <input id="another" type="submit" value="Make another sonnet">
-            <p><form>
-                <label>Compose one titled:</label><br>
-                <input id="anothertitle" type="text" size="20">
-                <input id="composetitled" type="submit" value="Go">
-              </form>
-              <p><a id="permalink" href="">Permalink</a> to the verse at right.
-          </tr>
-          <tr class="sidebar"><td>
-            Find out <a href="http://github.com/darius/amphigory">how it works.</a>
-            <p>Read 
-              <a href="http://books.google.com/books?id=kWElP9YZkzQC&pg=PA43&lpg=PA43&dq=trurl%27s+electronic+bard">&ldquo;Trurl's
-                Electronic Bard.&rdquo;</a>
-          </tr>
-          <tr class="sidebar"><td>
-            &#169; 2012
-              <a href="http://wry.me/blog/">Darius Bacon</a>
-          </tr>
-        </table>
-        </div>
-      </td>
-      <td>
-        <div class="poem">
-          <h1><span id="title" class="font1"> </span></h1>
-          <p id="verse" class="font0"><span style="font-size: smaller">[Excuse me a moment while I invoke the muse...]
-        </div>
-      </td>
-    </tr>
-  </table>
-  <script src="seedrandom.js"></script>
-  <script src="pronounce_iamb_compat.js"></script>
-  <script src="verse.js"></script>
 </body></html>
