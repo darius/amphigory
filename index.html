@@ -131,8 +131,23 @@ function setTitle(text) {
 }
 
 function pickFont(text) {
-    var k = /^Sonnet [0-9,]+$/.test(text) ? 1 : 1 + pickInt(7);
-    return 'font' + k;
+    if (/^Sonnet [0-9,]+$/.test(text)) {
+        keepPunctuation = true;
+        return 'font1';
+    } else {
+        var k = 1 + pickInt(7);
+        keepPunctuation = (k !== 7);
+        return 'font' + k;
+    }
+}
+
+var keepPunctuation = true;
+
+function reformat(s) {
+    if (keepPunctuation)
+        return s;
+    s = s.replace(/[^\w' \n<>&;]/g, '');
+    return s.replace(/&mdash;/g, '').replace(/; /g, ' ');
 }
 
 var stopVersifier = noOp, stopUpdater = noOp;
@@ -148,11 +163,12 @@ function invokeTheMuse(title) {
     }
     stopVersifier = versify(function(result) { 
         stopUpdater();
+        result = reformat(result);
         verse.innerHTML = result;
         verseCache['title=' + title] = result;
     });
     function updateVerse() {
-        verse.innerHTML = emit(states);
+        verse.innerHTML = reformat(emit(states));
     }
     stopUpdater = repeatedly(updateVerse, 50);
 }
