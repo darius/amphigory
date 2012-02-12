@@ -107,7 +107,7 @@ function numberWithCommas(x) {
 }
 
 function pushTitle(text) {
-    location.hash = 'title=' + text;
+    location.hash = 'title=' + encodeURIComponent(text);
     setTitle(text);
 }
 
@@ -116,7 +116,8 @@ window.onhashchange = function() {
 };
 
 function getTitle() {
-    return location.hash.toString().substring(1).replace(/^title=/, '');
+    var s = decodeURIComponent(location.hash.toString().substring(1));
+    return s.replace(/^title=/, '');
 }
 
 function setTitle(text) {
@@ -181,9 +182,8 @@ var composetitled = document.getElementById('composetitled');
 var permalink     = document.getElementById('permalink');
 
 if (location.hash === '') {
-    var url = document.URL + '#title=' + randomTitle();  // XXX need to encode anything?
+    var url = document.URL + '#title=' + encodeURIComponent(randomTitle());
     location.replace(url);
-// XXX apparently it's not adding to the history? check this...
 }
 
 another.onclick = function() {
