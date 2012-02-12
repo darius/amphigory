@@ -123,16 +123,15 @@ function setTitle(text) {
     title.replaceChild(document.createTextNode(dumbQuote(text)),
                        title.firstChild);
     Math.seedrandom(text);
-    var fontClass = pickFont();
+    var fontClass = pickFont(text);
     verse.className = fontClass;
     title.className = fontClass;
     invokeTheMuse(text);
     permalink.href = location.href;
 }
 
-function pickFont() {
-    var k = 2 + pickInt(12);
-    if (7 < k) k = 1;
+function pickFont(text) {
+    var k = /^Sonnet [0-9,]+$/.test(text) ? 1 : 1 + pickInt(7);
     return 'font' + k;
 }
 
