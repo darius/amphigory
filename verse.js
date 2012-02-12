@@ -44,7 +44,7 @@ function pickOne(xs) {
 }
 
 
-var stops  = "...............????!";
+var stops  = "......................?????!";
 var pauses = ",,;:-";
 var internalPunct = ",,,,,,,,,,,;;;::---!?";
 
