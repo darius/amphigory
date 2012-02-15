@@ -7,27 +7,36 @@
   <style type="text/css">
     body {
         font-family: 'Lusitana', Georgia, serif;
-        padding-top: 4em;
+        margin-top: 0;
+        padding-top: 0;
     }
     .metaness {
-        background: #cc9258;
         font-family: Verdana, sans-serif;
-    }
-    .sidebar {
-        background: #7d2a35;
+   /*     background-color: #eee; */
+        color: #444;
+        padding-left: 2em;
+        padding-right: 2em;
         font-size: 85%;
-        color: #feffc2;
+    }
+    .whee {
+        border-right: 1px solid #666;
     }
     h1 {
+        padding-top: 1.25em;
         font-size: 2.2em;
     }
     .poem {
-        padding-left: 4em;
+        padding-left: 5em;
         font-size: 110%;
     }
-    .metaness { margin-left: 4em; border-radius: 10px; }
 
-    a         { color: #bfba6c; }
+    hr {
+	width: 100%;
+        background-color: #666;
+	height: 1px;
+	border: none;
+    }
+
     a:link    { text-decoration: none; }
     a:visited { text-decoration: none; }
     a:hover   { text-decoration: underline; }
@@ -54,40 +63,37 @@
 <body>
   <table cellpadding="0" cellspacing="0">
     <tr>
-      <td>
+      <td class="whee">
       <td valign="bottom">
         <div class="poem">
           <h1><span id="title" class="font1"> </span></h1>
         </div>
     </tr>
     <tr>
-      <td valign="top">
+      <td valign="top" class="whee">
         <div class="metaness">
-        <table cellpadding="10" cellspacing="10">
-          <tr class="sidebar"><td>
-            <input id="another" type="submit" value="Make another sonnet">
-            <p><form>
-                <label>Compose one titled:</label><br>
-                <input id="anothertitle" type="text" size="20">
-                <input id="composetitled" type="submit" value="Go">
-              </form>
-              <br><a id="permalink" href="">Permalink</a> to the verse at right.
-          </tr>
-          <tr class="sidebar"><td>
-            Find out <a href="http://github.com/darius/amphigory">how it works.</a>
-            <br><br>Read 
+          <input id="another" type="submit" value="Make another sonnet">
+          <p><form>
+              <label>Compose one titled:</label><br>
+              <input id="anothertitle" type="text" size="20">
+              <input id="composetitled" type="submit" value="Go">
+            </form>
+          <p><a id="permalink" href="">Permalink</a> to the verse at right.</p>
+          <hr>
+          Find out <a href="http://github.com/darius/amphigory">how this works.</a>
+          <p>Read 
               <a href="http://books.google.com/books?id=kWElP9YZkzQC&pg=PA43&lpg=PA43&dq=trurl%27s+electronic+bard">&ldquo;Trurl's
                 Electronic Bard.&rdquo;</a>
-          </tr>
-          <tr class="sidebar"><td>
-            &#169; 2012
-              <a href="http://wry.me/blog/">Darius Bacon</a>
-          </tr>
-        </table>
+          <hr>
+          &#169; 2012
+          <a href="http://wry.me/blog/">Darius Bacon</a>
         </div>
       </td>
-      <td  class="poem" class="poembody">
+      <td class="poem">
         <div id="verse" class="font0">[Excuse me a moment while I invoke the muse...]</div>
+        <br>
+        <br>
+        <br>
       </td>
     </tr>
   </table>
