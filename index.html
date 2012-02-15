@@ -26,7 +26,6 @@
         font-size: 110%;
     }
     .metaness { margin-left: 4em; border-radius: 10px; }
-    td        { border-radius: 7px; }
 
     a         { color: #bfba6c; }
     a:link    { text-decoration: none; }
@@ -53,11 +52,18 @@
   </style>
 </head>
 <body>
-  <table>
+  <table cellpadding="0" cellspacing="0">
+    <tr>
+      <td>
+      <td valign="bottom">
+        <div class="poem">
+          <h1><span id="title" class="font1"> </span></h1>
+        </div>
+    </tr>
     <tr>
       <td valign="top">
         <div class="metaness">
-        <table cellpadding=10 cellspacing=10>
+        <table cellpadding="10" cellspacing="10">
           <tr class="sidebar"><td>
             <input id="another" type="submit" value="Make another sonnet">
             <p><form>
@@ -80,11 +86,8 @@
         </table>
         </div>
       </td>
-      <td>
-        <div class="poem">
-          <h1><span id="title" class="font1"> </span></h1>
-          <p id="verse" class="font0">[Excuse me a moment while I invoke the muse...]
-        </div>
+      <td  class="poem" class="poembody">
+        <div id="verse" class="font0">[Excuse me a moment while I invoke the muse...]</div>
       </td>
     </tr>
   </table>
