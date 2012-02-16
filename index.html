@@ -54,7 +54,7 @@
 
     .font5 { font: normal 125%/160% 'La Belle Aurore', cursive; }
 
-    .font6 { font: normal 125%/150% 'Mrs Saint Delafield', cursive; }
+    .font6 { font: normal 180%/140% 'Mrs Saint Delafield', cursive; }
 
     .font7 { font: 100% 'Courier New', 'Courier', monotype;
              text-transform: lowercase; }
@@ -157,7 +157,9 @@ function reformat(s) {
     if (keepPunctuation)
         return s;
     s = s.replace(/[^\w' \n<>&;]/g, '');
-    return s.replace(/&mdash;/g, '').replace(/; /g, ' ');
+    s = s.replace(/&mdash;/g, '');
+    s = s.replace(/; /g, ' ').replace(/;</g, '<');
+    return s;
 }
 
 var stopVersifier = noOp, stopUpdater = noOp;
