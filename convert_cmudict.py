@@ -42,7 +42,7 @@ allstressed = open('words.allstressed', 'w')
 uniambic = open('words.uniambic', 'w')
 
 pronunciations = {}
-for line in open('../languagetoys/cmudict.0.7a'):
+for line in open('cmudict.0.7a'):
     if ';;' in line or not line.strip():
         continue
     word, phones = line.split(None, 1)
