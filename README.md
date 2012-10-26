@@ -11,7 +11,7 @@ To run this locally: point your browser at index.html.
 To understand the code, you need to understand the data it's using.
 See 'About the CMU dictionary' and 'Phoneme set' at
 http://www.speech.cs.cmu.edu/cgi-bin/cmudict
-This, for example, one pronunciation of 'hello' is encoded as
+So, for example, one pronunciation of 'hello' is encoded as
 `HH AH0 L OW1`.
 
 To rebuild the dictionary, you need some files not in the repo, and
