@@ -1,7 +1,9 @@
 A web toy generating rhymed metrical verse using the CMU pronouncing
 dictionary. Try it at http://wry.me/sonnetron/. Derived from
 https://github.com/darius/languagetoys/blob/master/simpleverse.py (but
-fancier now).
+fancier now; but note that simpleverse can also generate use
+higher-order models and produce other verse forms -- you can see both
+in https://gist.github.com/darius/2371822 ).
 
 Thanks to Shae Erisson, Flourish Klink, and Halsted Bernard for beta
 feedback.
